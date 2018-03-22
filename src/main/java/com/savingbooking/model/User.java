@@ -9,35 +9,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * @author Ram Alapure
- * @since 05-04-2017
- */
-
 @Entity
-@Table(name="User")
+@Table(name = "User")
 public class User {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
 	private long id;
-	
+
+	@Column(name = "first_name")
 	private String firstName;
-	
+
+	@Column(name = "last_name")
 	private String lastName;
-	
+
+	@Column(name = "date_of_birth")
 	private LocalDate dob;
-	
+
+	@Column(name = "gender")
 	private String gender;
-	
+
+	@Column(name = "role")
 	private String role;
-	
+
+	@Column(name = "email")
 	private String email;
-	
+
+	@Column(name = "password")
 	private String password;
 
-	
 	public long getId() {
 		return id;
 	}
@@ -61,7 +62,7 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
+
 	public LocalDate getDob() {
 		return dob;
 	}
@@ -69,7 +70,7 @@ public class User {
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
 	}
-	
+
 	public String getGender() {
 		return gender;
 	}
@@ -77,7 +78,7 @@ public class User {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
+
 	public String getRole() {
 		return role;
 	}
@@ -108,5 +109,4 @@ public class User {
 				+ email + "]";
 	}
 
-	
 }
