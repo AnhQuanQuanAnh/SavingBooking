@@ -45,10 +45,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
-/**
- * @author Ram Alapure
- * @since 05-04-2017
- */
 
 @Controller
 public class UserController implements Initializable{

@@ -21,10 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-/**
- * @author Ram Alapure
- * @since 05-04-2017
- */
 
 @Controller
 public class LoginController implements Initializable{
@@ -52,7 +48,7 @@ public class LoginController implements Initializable{
     private void login(ActionEvent event) throws IOException{
     	if(userService.authenticate(getUsername(), getPassword())){
     		    		
-    		stageManager.switchScene(FxmlView.USER);
+    		stageManager.switchScene(FxmlView.SAVINGBOOK);
     		
     	}else{
     		lblLogin.setText("Login Failed.");
