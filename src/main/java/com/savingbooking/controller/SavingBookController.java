@@ -15,8 +15,9 @@ import org.springframework.stereotype.Controller;
 
 import com.savingbooking.config.StageManager;
 import com.savingbooking.model.SavingBook;
-import com.savingbooking.model.TypeOfSaving;
+import com.savingbooking.model.TypeOfSavingBook;
 import com.savingbooking.service.SavingBookService;
+import com.savingbooking.service.TypeOfSavingBookService;
 import com.savingbooking.view.FxmlView;
 
 import javafx.application.Platform;
@@ -89,7 +90,7 @@ public class SavingBookController implements Initializable {
 	private TextField email;
 
 	@FXML
-	private ComboBox<TypeOfSaving> cbTypeOfSavingBook;
+	private ComboBox<TypeOfSavingBook> cbTypeOfSavingBook;
 
 	@FXML
 	private Button reset;
@@ -145,11 +146,14 @@ public class SavingBookController implements Initializable {
 
 	@Autowired
 	private SavingBookService savingBookService;
+	@Autowired
+	private TypeOfSavingBookService typeOfSavingBookService;
 
 	private ObservableList<SavingBook> savingbookList = FXCollections.observableArrayList();
 	private ObservableList<String> typeOfSavingBook = FXCollections.observableArrayList("Unlimit", "3 Months",
 			"6 Months");
 
+	private ObservableList<TypeOfSavingBook> typeOfSavingBookList = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -224,7 +228,7 @@ public class SavingBookController implements Initializable {
 						rbMale.setSelected(true);
 					else
 						rbFemale.setSelected(true);
-					cbTypeOfSavingBook.getSelectionModel().select(savingbook.getTypeOfSaving());
+					cbTypeOfSavingBook.getSelectionModel().select(savingbook.getTypeOfSavingBook());
 				}
 			};
 			return cell;
@@ -296,7 +300,7 @@ public class SavingBookController implements Initializable {
 		return Double.parseDouble(depositNumber.getText());
 	}
 
-	public TypeOfSaving getTypeOfSavingBook() {
+	public TypeOfSavingBook getTypeOfSavingBook() {
 		return cbTypeOfSavingBook.getSelectionModel().getSelectedItem();
 	}
 
@@ -384,7 +388,7 @@ public class SavingBookController implements Initializable {
 					savingBook.setIdCard(getIdCard());
 					savingBook.setAddress(getAddress());
 					savingBook.setDeposit(getDepositNumber());
-					savingBook.setTypeOfSaving(getTypeOfSavingBook());
+					savingBook.setTypeOfSavingBook(getTypeOfSavingBook());
 
 					SavingBook newSavingBook = savingBookService.save(savingBook);
 

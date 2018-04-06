@@ -26,16 +26,16 @@ public class SavingBook {
 
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
-	
+
 	@Column(name = "date_of_birth")
 	private LocalDate dob;
-	
+
 	@Column(name = "gender")
 	private String gender;
-	
-	@Column(name="phone_number")
+
+	@Column(name = "phone_number")
 	private String phoneNumber;
-	
+
 	@Column(name = "email")
 	private String email;
 
@@ -53,7 +53,7 @@ public class SavingBook {
 
 	@OneToOne
 	@JoinColumn(name = "id")
-	private TypeOfSaving typeOfSaving;
+	private TypeOfSavingBook typeOfSavingBook;
 
 	public Long getId() {
 		return id;
@@ -143,20 +143,20 @@ public class SavingBook {
 		this.dateCreate = dateCreate;
 	}
 
-	public TypeOfSaving getTypeOfSaving() {
-		return typeOfSaving;
+	public TypeOfSavingBook getTypeOfSavingBook() {
+		return typeOfSavingBook;
 	}
 
-	public void setTypeOfSaving(TypeOfSaving typeOfSaving) {
-		this.typeOfSaving = typeOfSaving;
+	public void setTypeOfSavingBook(TypeOfSavingBook typeOfSavingBook) {
+		this.typeOfSavingBook = typeOfSavingBook;
 	}
 
 	@Override
 	public String toString() {
 		return "SavingBook [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob
 				+ ", gender=" + gender + ", phoneNumber=" + phoneNumber + ", email=" + email + ", address=" + address
-				+ ", deposit=" + deposit + ", idCard=" + idCard + ", dateCreate=" + dateCreate + ", typeOfSaving="
-				+ typeOfSaving + "]";
+				+ ", deposit=" + deposit + ", idCard=" + idCard + ", dateCreate=" + dateCreate + ", typeOfSavingBook="
+				+ typeOfSavingBook + "]";
 	}
 
 }

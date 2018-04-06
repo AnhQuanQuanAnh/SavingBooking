@@ -9,8 +9,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "type_of_saving")
-public class TypeOfSaving {
+@Table(name = "type_of_saving_book")
+public class TypeOfSavingBook{
 
 	@Id
 	@GeneratedValue
@@ -24,7 +24,7 @@ public class TypeOfSaving {
 	@JoinColumn(name = "id")
 	private SavingBook savingBook;
 
-	public TypeOfSaving() {
+	public TypeOfSavingBook() {
 
 	}
 
