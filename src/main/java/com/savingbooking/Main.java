@@ -1,13 +1,15 @@
 package com.savingbooking;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.savingbooking.config.StageManager;
+import com.savingbooking.controller.TypeOfSavingBookController;
 import com.savingbooking.view.FxmlView;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 @SpringBootApplication
 public class Main extends Application {
@@ -17,6 +19,8 @@ public class Main extends Application {
 
     public static void main(final String[] args) {
         Application.launch(args);
+        TypeOfSavingBookController bookController = new TypeOfSavingBookController();
+        bookController.findAll();
     }
 
     @Override

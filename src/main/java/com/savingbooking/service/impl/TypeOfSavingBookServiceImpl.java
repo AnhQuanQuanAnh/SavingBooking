@@ -48,10 +48,4 @@ public class TypeOfSavingBookServiceImpl implements TypeOfSavingBookService {
 	public List<TypeOfSavingBook> findAll() {
 		return typeOfSavingBookRepository.findAll();
 	}
-
-	@Override
-	public List<String> findAllName() {
-		return typeOfSavingBookRepository.findAllName();
-	}
-
 }

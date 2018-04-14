@@ -123,7 +123,7 @@ public class UserController implements Initializable{
     private StageManager stageManager;
 	
 	@Autowired
-	private UserService userService;
+	UserService userService;
 	
 	private ObservableList<User> userList = FXCollections.observableArrayList();
 	private ObservableList<String> roles = FXCollections.observableArrayList("Admin", "User");

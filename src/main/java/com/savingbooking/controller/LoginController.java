@@ -38,7 +38,7 @@ public class LoginController implements Initializable{
     private Label lblLogin;
     
     @Autowired
-    private UserService userService;
+    UserService userService;
     
     @Lazy
     @Autowired

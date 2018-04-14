@@ -1,5 +1,6 @@
 package com.savingbooking.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -9,12 +10,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "saving_book")
-public class SavingBook {
+public class SavingBook implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +35,7 @@ public class SavingBook {
 	private String lastName;
 
 	@Column(name = "date_of_birth")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dob;
 
 	@Column(name = "gender")
@@ -43,16 +51,18 @@ public class SavingBook {
 	private String address;
 
 	@Column(name = "deposit", nullable = false)
-	private Double deposit;
+	private double deposit;
 
 	@Column(name = "id_card", nullable = false)
 	private String idCard;
 
-	@Column(name = "date_create", nullable = false)
-	private Date dateCreate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "createdAt")
+	private Date createdAt;
 
-	@OneToOne
-	@JoinColumn(name = "id")
+	@ManyToOne
+	@JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private TypeOfSavingBook typeOfSavingBook;
 
 	public Long getId() {
@@ -87,8 +97,12 @@ public class SavingBook {
 		this.address = address;
 	}
 
-	public Double getDeposit() {
+	public double getDeposit() {
 		return deposit;
+	}
+
+	public void setDeposit(double deposit) {
+		this.deposit = deposit;
 	}
 
 	public LocalDate getDob() {
@@ -123,10 +137,6 @@ public class SavingBook {
 		this.email = email;
 	}
 
-	public void setDeposit(Double deposit) {
-		this.deposit = deposit;
-	}
-
 	public String getIdCard() {
 		return idCard;
 	}
@@ -135,12 +145,12 @@ public class SavingBook {
 		this.idCard = idCard;
 	}
 
-	public Date getDateCreate() {
-		return dateCreate;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setDateCreate(Date dateCreate) {
-		this.dateCreate = dateCreate;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public TypeOfSavingBook getTypeOfSavingBook() {
@@ -155,7 +165,7 @@ public class SavingBook {
 	public String toString() {
 		return "SavingBook [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob
 				+ ", gender=" + gender + ", phoneNumber=" + phoneNumber + ", email=" + email + ", address=" + address
-				+ ", deposit=" + deposit + ", idCard=" + idCard + ", dateCreate=" + dateCreate + ", typeOfSavingBook="
+				+ ", deposit=" + deposit + ", idCard=" + idCard + ", dateCreate=" + createdAt + ", typeOfSavingBook="
 				+ typeOfSavingBook + "]";
 	}
 

@@ -90,7 +90,7 @@ public class SavingBookController implements Initializable {
 	private TextField email;
 
 	@FXML
-	private ComboBox<TypeOfSavingBook> cbTypeOfSavingBook;
+	private ComboBox<String> cbTypeOfSavingBook;
 
 	@FXML
 	private Button reset;
@@ -150,14 +150,13 @@ public class SavingBookController implements Initializable {
 	private TypeOfSavingBookService typeOfSavingBookService;
 
 	private ObservableList<SavingBook> savingbookList = FXCollections.observableArrayList();
-	private ObservableList<String> typeOfSavingBook = FXCollections.observableArrayList("Unlimit", "3 Months",
-			"6 Months");
+	private ObservableList<String> typeOfSavingBook = FXCollections.observableArrayList("Unlimited");
 
-	private ObservableList<TypeOfSavingBook> typeOfSavingBookList = FXCollections.observableArrayList();
+	//private ObservableList<TypeOfSavingBook> typeOfSavingBookList = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		cbTypeOfSavingBook.setValue(getTypeOfSavingBook());
+		cbTypeOfSavingBook.setItems(typeOfSavingBook);
 
 		savingbookTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -223,12 +222,12 @@ public class SavingBookController implements Initializable {
 					phoneNumber.setText(savingbook.getPhoneNumber());
 					address.setText(savingbook.getAddress());
 					idCard.setText(savingbook.getIdCard());
-					depositNumber.setText(savingbook.getDeposit().toString());
+					depositNumber.setText(String.valueOf(savingbook.getDeposit()));
 					if (savingbook.getGender().equals("Male"))
 						rbMale.setSelected(true);
 					else
 						rbFemale.setSelected(true);
-					cbTypeOfSavingBook.getSelectionModel().select(savingbook.getTypeOfSavingBook());
+					cbTypeOfSavingBook.getSelectionModel().select(getRole());
 				}
 			};
 			return cell;
@@ -300,7 +299,10 @@ public class SavingBookController implements Initializable {
 		return Double.parseDouble(depositNumber.getText());
 	}
 
-	public TypeOfSavingBook getTypeOfSavingBook() {
+	/*public TypeOfSavingBook getTypeOfSavingBook() {
+		return cbTypeOfSavingBook.getSelectionModel().getSelectedItem();
+	}*/
+	public String getRole() {
 		return cbTypeOfSavingBook.getSelectionModel().getSelectedItem();
 	}
 
@@ -388,7 +390,7 @@ public class SavingBookController implements Initializable {
 					savingBook.setIdCard(getIdCard());
 					savingBook.setAddress(getAddress());
 					savingBook.setDeposit(getDepositNumber());
-					savingBook.setTypeOfSavingBook(getTypeOfSavingBook());
+					//savingBook.setTypeOfSavingBook(getRole());
 
 					SavingBook newSavingBook = savingBookService.save(savingBook);
 
