@@ -62,8 +62,12 @@ public class SavingBook implements Serializable {
 	private Date createdAt;
 
 	@ManyToOne
-	@JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false)
 	private TypeOfSavingBook typeOfSavingBook;
+
+	public SavingBook() {
+
+	}
 
 	public Long getId() {
 		return id;

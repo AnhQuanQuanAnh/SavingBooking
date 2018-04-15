@@ -3,6 +3,8 @@ package com.savingbooking.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -43,9 +45,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 @Controller
 public class SavingBookController implements Initializable {
@@ -90,7 +94,7 @@ public class SavingBookController implements Initializable {
 	private TextField email;
 
 	@FXML
-	private ComboBox<String> cbTypeOfSavingBook;
+	private ComboBox<TypeOfSavingBook> cbTypeOfSavingBook;
 
 	@FXML
 	private Button reset;
@@ -132,7 +136,7 @@ public class SavingBookController implements Initializable {
 	private TableColumn<SavingBook, String> colDepositNumber;
 
 	@FXML
-	private TableColumn<SavingBook, String> colTypeOfSavingBook;
+	private TableColumn<TypeOfSavingBook, String> colTypeOfSavingBook;
 
 	@FXML
 	private TableColumn<SavingBook, Boolean> colEdit;
@@ -150,13 +154,16 @@ public class SavingBookController implements Initializable {
 	private TypeOfSavingBookService typeOfSavingBookService;
 
 	private ObservableList<SavingBook> savingbookList = FXCollections.observableArrayList();
-	private ObservableList<String> typeOfSavingBook = FXCollections.observableArrayList("Unlimited");
 
-	//private ObservableList<TypeOfSavingBook> typeOfSavingBookList = FXCollections.observableArrayList();
+	private ObservableList<TypeOfSavingBook> typeOfSavingBookList;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		cbTypeOfSavingBook.setItems(typeOfSavingBook);
+		typeOfSavingBookList = FXCollections.observableArrayList();
+		for (TypeOfSavingBook item : typeOfSavingBookService.findAll()) {
+			typeOfSavingBookList.add(item);
+		}
+		cbTypeOfSavingBook.setItems(typeOfSavingBookList);
 
 		savingbookTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -166,6 +173,28 @@ public class SavingBookController implements Initializable {
 	}
 
 	private void setColumnProperties() {
+		colDOB.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<LocalDate>() {
+			String pattern = "dd/MM/yyyy";
+			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+
+			@Override
+			public String toString(LocalDate date) {
+				if (date != null) {
+					return dateFormatter.format(date);
+				} else {
+					return "";
+				}
+			}
+
+			@Override
+			public LocalDate fromString(String string) {
+				if (string != null && !string.isEmpty()) {
+					return LocalDate.parse(string, dateFormatter);
+				} else {
+					return null;
+				}
+			}
+		}));
 		colSavingBookId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 		colLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -174,8 +203,8 @@ public class SavingBookController implements Initializable {
 		colPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
 		colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 		colIdCard.setCellValueFactory(new PropertyValueFactory<>("idCard"));
-		colDepositNumber.setCellValueFactory(new PropertyValueFactory<>("depositNumber"));
-		colTypeOfSavingBook.setCellValueFactory(new PropertyValueFactory<>("typeOfSavingBook"));
+		colDepositNumber.setCellValueFactory(new PropertyValueFactory<>("deposit"));
+		colTypeOfSavingBook.setCellValueFactory(new PropertyValueFactory<TypeOfSavingBook, String>("typeOfSavingBook"));
 		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 		colEdit.setCellFactory(cellFactory);
 	}
@@ -227,7 +256,7 @@ public class SavingBookController implements Initializable {
 						rbMale.setSelected(true);
 					else
 						rbFemale.setSelected(true);
-					cbTypeOfSavingBook.getSelectionModel().select(getRole());
+					cbTypeOfSavingBook.getSelectionModel().select(getTypeOfSavingBook());
 				}
 			};
 			return cell;
@@ -261,14 +290,15 @@ public class SavingBookController implements Initializable {
 		phoneNumber.clear();
 		depositNumber.clear();
 		address.clear();
+		cbTypeOfSavingBook.getSelectionModel().clearSelection();
 	}
 
 	public String getFirstName() {
-		return firstName.getText();
+		return firstName.getText().trim();
 	}
 
 	public String getLastName() {
-		return lastName.getText();
+		return lastName.getText().trim();
 	}
 
 	public LocalDate getDob() {
@@ -280,30 +310,27 @@ public class SavingBookController implements Initializable {
 	}
 
 	public String getEmail() {
-		return email.getText();
+		return email.getText().trim();
 	}
 
 	public String getPhoneNumber() {
-		return phoneNumber.getText();
+		return phoneNumber.getText().trim();
 	}
 
 	public String getIdCard() {
-		return idCard.getText();
+		return idCard.getText().trim();
 	}
 
 	public String getAddress() {
-		return address.getText();
+		return address.getText().trim();
 	}
 
 	public Double getDepositNumber() {
-		return Double.parseDouble(depositNumber.getText());
+		return Double.parseDouble(depositNumber.getText().trim());
 	}
 
-	/*public TypeOfSavingBook getTypeOfSavingBook() {
-		return cbTypeOfSavingBook.getSelectionModel().getSelectedItem();
-	}*/
-	public String getRole() {
-		return cbTypeOfSavingBook.getSelectionModel().getSelectedItem();
+	public TypeOfSavingBook getTypeOfSavingBook() {
+		return cbTypeOfSavingBook.getValue();
 	}
 
 	private String getGenderTitle(String gender) {
@@ -373,7 +400,6 @@ public class SavingBookController implements Initializable {
 
 	@FXML
 	private void saveSavingBook(ActionEvent event) {
-
 		if (validate("First Name", getFirstName(), "[a-zA-Z]+") && validate("Last Name", getLastName(), "[a-zA-Z]+")
 				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())) {
 
@@ -389,9 +415,9 @@ public class SavingBookController implements Initializable {
 					savingBook.setPhoneNumber(getPhoneNumber());
 					savingBook.setIdCard(getIdCard());
 					savingBook.setAddress(getAddress());
+					savingBook.setCreatedAt(new Date());
 					savingBook.setDeposit(getDepositNumber());
-					//savingBook.setTypeOfSavingBook(getRole());
-
+					savingBook.setTypeOfSavingBook(getTypeOfSavingBook());
 					SavingBook newSavingBook = savingBookService.save(savingBook);
 
 					saveAlert(newSavingBook);
@@ -432,7 +458,6 @@ public class SavingBookController implements Initializable {
 	private void loadSavingBookDetails() {
 		savingbookList.clear();
 		savingbookList.addAll(savingBookService.findAll());
-
 		savingbookTable.setItems(savingbookList);
 	}
 

@@ -35,6 +35,14 @@ public class TypeOfSavingBook implements Serializable {
 
 	}
 
+	public TypeOfSavingBook(String name) {
+		this.name = name;
+	}
+
+	public TypeOfSavingBook(Long id) {
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -57,6 +65,11 @@ public class TypeOfSavingBook implements Serializable {
 
 	public void setSavingBook(Set<SavingBook> savingBook) {
 		this.savingBook = savingBook;
+	}
+
+	@Override
+	public String toString() {
+		return this.name;
 	}
 
 }

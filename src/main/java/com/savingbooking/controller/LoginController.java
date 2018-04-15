@@ -1,6 +1,5 @@
 package com.savingbooking.controller;
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,40 +20,39 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-
 @Controller
-public class LoginController implements Initializable{
+public class LoginController implements Initializable {
 
 	@FXML
-    private Button btnLogin;
+	private Button btnLogin;
 
-    @FXML
-    private PasswordField password;
-
-    @FXML
-    private TextField username;
-
-    @FXML
-    private Label lblLogin;
-    
-    @Autowired
-    UserService userService;
-    
-    @Lazy
-    @Autowired
-    private StageManager stageManager;
-        
 	@FXML
-    private void login(ActionEvent event) throws IOException{
-    	if(userService.authenticate(getUsername(), getPassword())){
-    		    		
-    		stageManager.switchScene(FxmlView.SAVINGBOOK);
-    		
-    	}else{
-    		lblLogin.setText("Login Failed.");
-    	}
-    }
-	
+	private PasswordField password;
+
+	@FXML
+	private TextField username;
+
+	@FXML
+	private Label lblLogin;
+
+	@Autowired
+	UserService userService;
+
+	@Lazy
+	@Autowired
+	private StageManager stageManager;
+
+	@FXML
+	private void login(ActionEvent event) throws IOException {
+		if (userService.authenticate(getUsername(), getPassword())) {
+
+			stageManager.switchScene(FxmlView.SAVINGBOOK);
+
+		} else {
+			lblLogin.setText("Login Failed.");
+		}
+	}
+
 	public String getPassword() {
 		return password.getText();
 	}
@@ -65,7 +63,7 @@ public class LoginController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 	}
 
 }
