@@ -429,6 +429,7 @@ public class SavingBookController implements Initializable {
 				savingBook.setLastName(getLastName());
 				savingBook.setDob(getDob());
 				savingBook.setGender(getGender());
+				savingBook.setUpdateAt(new Date());
 				SavingBook updatedSavingBook = savingBookService.update(savingBook);
 				updateAlert(updatedSavingBook);
 			}

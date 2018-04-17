@@ -34,11 +34,11 @@ public class SavingBook implements Serializable {
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
-	@Column(name = "date_of_birth")
+	@Column(name = "date_of_birth", nullable = false)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dob;
 
-	@Column(name = "gender")
+	@Column(name = "gender", nullable = false)
 	private String gender;
 
 	@Column(name = "phone_number")
@@ -47,7 +47,7 @@ public class SavingBook implements Serializable {
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "address", nullable = false)
+	@Column(name = "address")
 	private String address;
 
 	@Column(name = "deposit", nullable = false)
@@ -60,6 +60,11 @@ public class SavingBook implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "createdAt")
 	private Date createdAt;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "update_at")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date updateAt;
 
 	@ManyToOne
 	@JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false)
@@ -165,12 +170,20 @@ public class SavingBook implements Serializable {
 		this.typeOfSavingBook = typeOfSavingBook;
 	}
 
+	public Date getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Date updateAt) {
+		this.updateAt = updateAt;
+	}
+
 	@Override
 	public String toString() {
 		return "SavingBook [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob
 				+ ", gender=" + gender + ", phoneNumber=" + phoneNumber + ", email=" + email + ", address=" + address
-				+ ", deposit=" + deposit + ", idCard=" + idCard + ", dateCreate=" + createdAt + ", typeOfSavingBook="
-				+ typeOfSavingBook + "]";
+				+ ", deposit=" + deposit + ", idCard=" + idCard + ", createdAt=" + createdAt + ", updateAt=" + updateAt
+				+ ", typeOfSavingBook=" + typeOfSavingBook + "]";
 	}
 
 }

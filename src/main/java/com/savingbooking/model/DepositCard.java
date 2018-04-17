@@ -1,5 +1,6 @@
 package com.savingbooking.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,27 +10,46 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "deposit_card")
-public class DepositCard {
+public class DepositCard implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "name_customer", nullable = false)
-	private String nameCustomer;
+	@Column(name = "customer_name", nullable = false)
+	private String customerName;
+
+	@Column(name = "id_card", nullable = false)
+	private String idCard;
 
 	@Column(name = "deposit_amount", nullable = false)
 	private Double depositAmount;
 
-	@Column(name = "deposit_date", nullable = false)
-	private Date depositDate;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "create_at")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date createAt;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "update_at")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date updateAt;
 
 	@ManyToOne
-	@JoinColumn(name = "savingbook_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "savingbook_id", referencedColumnName = "id")
 	private SavingBook savingBook;
 
 	public DepositCard() {
@@ -44,12 +64,12 @@ public class DepositCard {
 		this.id = id;
 	}
 
-	public String getNameCustomer() {
-		return nameCustomer;
+	public String getCustomerName() {
+		return customerName;
 	}
 
-	public void setNameCustomer(String nameCustomer) {
-		this.nameCustomer = nameCustomer;
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 	public Double getDepositAmount() {
@@ -60,12 +80,20 @@ public class DepositCard {
 		this.depositAmount = depositAmount;
 	}
 
-	public Date getDepositDate() {
-		return depositDate;
+	public Date getCreateAt() {
+		return createAt;
 	}
 
-	public void setDepositDate(Date depositDate) {
-		this.depositDate = depositDate;
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+	public Date getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Date updateAt) {
+		this.updateAt = updateAt;
 	}
 
 	public SavingBook getSavingBook() {
@@ -76,10 +104,19 @@ public class DepositCard {
 		this.savingBook = savingBook;
 	}
 
+	public String getIdCard() {
+		return idCard;
+	}
+
+	public void setIdCard(String idCard) {
+		this.idCard = idCard;
+	}
+
 	@Override
 	public String toString() {
-		return "DepositCard [id=" + id + ", nameCustomer=" + nameCustomer + ", depositAmount=" + depositAmount
-				+ ", depositDate=" + depositDate + ", savingBook=" + savingBook + "]";
+		return "DepositCard [id=" + id + ", customerName=" + customerName + ", idCard=" + idCard + ", depositAmount="
+				+ depositAmount + ", createAt=" + createAt + ", updateAt=" + updateAt + ", savingBook=" + savingBook
+				+ "]";
 	}
 
 }

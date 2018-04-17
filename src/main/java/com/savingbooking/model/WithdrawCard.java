@@ -1,5 +1,6 @@
 package com.savingbooking.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,27 +10,46 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "withdraw_card")
-public class WithdrawCard {
+public class WithdrawCard implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "name_customer", nullable = false)
-	private String nameCustomer;
+	@Column(name = "customer_name", nullable = false)
+	private String customerName;
+
+	@Column(name = "id_card", nullable = false)
+	private String idCard;
 
 	@Column(name = "withdraw_amount", nullable = false)
 	private Double withdrawAmount;
 
-	@Column(name = "create_date", nullable = false)
-	private Date createDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_at")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date createAt;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "update_at")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date updateAt;
 
 	@ManyToOne
-	@JoinColumn(name = "savingbook_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "savingbook_id", referencedColumnName = "id")
 	private SavingBook savingBook;
 
 	public WithdrawCard() {
@@ -52,14 +72,6 @@ public class WithdrawCard {
 		this.withdrawAmount = withdrawAmount;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
 	public SavingBook getSavingBook() {
 		return savingBook;
 	}
@@ -68,17 +80,43 @@ public class WithdrawCard {
 		this.savingBook = savingBook;
 	}
 
-	public String getNameCustomer() {
-		return nameCustomer;
+	public String getCustomerName() {
+		return customerName;
 	}
 
-	public void setNameCustomer(String nameCustomer) {
-		this.nameCustomer = nameCustomer;
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getIdCard() {
+		return idCard;
+	}
+
+	public void setIdCard(String idCard) {
+		this.idCard = idCard;
+	}
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+	public Date getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Date updateAt) {
+		this.updateAt = updateAt;
 	}
 
 	@Override
 	public String toString() {
-		return "WithdrawCard [id=" + id + ", nameCustomer=" + nameCustomer + ", withdrawAmount=" + withdrawAmount
-				+ ", createDate=" + createDate + ", savingBook=" + savingBook + "]";
+		return "WithdrawCard [id=" + id + ", customerName=" + customerName + ", idCard=" + idCard + ", withdrawAmount="
+				+ withdrawAmount + ", createAt=" + createAt + ", updateAt=" + updateAt + ", savingBook=" + savingBook
+				+ "]";
 	}
+
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -168,6 +169,7 @@ public class UserController implements Initializable {
 					user.setRole(getRole());
 					user.setEmail(getEmail());
 					user.setPassword(getPassword());
+					user.setCreateAt(new Date());
 
 					User newUser = userService.save(user);
 
@@ -181,6 +183,7 @@ public class UserController implements Initializable {
 				user.setDob(getDob());
 				user.setGender(getGender());
 				user.setRole(getRole());
+				user.setUpdateAt(new Date());
 				User updatedUser = userService.update(user);
 				updateAlert(updatedUser);
 			}
@@ -332,6 +335,8 @@ public class UserController implements Initializable {
 						setText(null);
 					} else {
 						btnEdit.setOnAction(e -> {
+							email.setEditable(false);
+							password.setEditable(false);
 							User user = getTableView().getItems().get(getIndex());
 							updateUser(user);
 						});
@@ -343,7 +348,6 @@ public class UserController implements Initializable {
 						iv.setSmooth(true);
 						iv.setCache(true);
 						btnEdit.setGraphic(iv);
-
 						setGraphic(btnEdit);
 						setAlignment(Pos.CENTER);
 						setText(null);
@@ -360,6 +364,8 @@ public class UserController implements Initializable {
 					else
 						rbFemale.setSelected(true);
 					cbRole.getSelectionModel().select(user.getRole());
+					email.setText(user.getEmail());
+					password.setText(user.getPassword());
 				}
 			};
 			return cell;

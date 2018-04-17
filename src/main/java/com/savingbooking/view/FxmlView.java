@@ -36,6 +36,17 @@ public enum FxmlView {
 		public String getFxmlFile() {
             return "/fxml/SavingBook.fxml";
         }
+    },
+	DEPOSITCARD {
+        @Override
+		public String getTitle() {
+            return getStringFromResourceBundle("depositcard.title");
+        }
+
+        @Override
+		public String getFxmlFile() {
+            return "/fxml/DepositCard.fxml";
+        }
     };
     
     public abstract String getTitle();

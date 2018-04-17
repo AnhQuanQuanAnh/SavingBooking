@@ -3,7 +3,7 @@
 # ===============================
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/savingbook
+    url: jdbc:mysql://localhost:3306/savingbook?zeroDateTimeBehavior=convertToNull
     username: root
     password: root
 
@@ -13,7 +13,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     database-platform: MYSQL
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL5Dialect

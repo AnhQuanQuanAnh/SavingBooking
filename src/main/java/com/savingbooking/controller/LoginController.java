@@ -46,7 +46,7 @@ public class LoginController implements Initializable {
 	private void login(ActionEvent event) throws IOException {
 		if (userService.authenticate(getUsername(), getPassword())) {
 
-			stageManager.switchScene(FxmlView.SAVINGBOOK);
+			stageManager.switchScene(FxmlView.DEPOSITCARD);
 
 		} else {
 			lblLogin.setText("Login Failed.");
