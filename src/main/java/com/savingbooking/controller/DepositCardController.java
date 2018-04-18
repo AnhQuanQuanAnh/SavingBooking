@@ -2,8 +2,6 @@ package com.savingbooking.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +15,9 @@ import org.springframework.stereotype.Controller;
 
 import com.savingbooking.config.StageManager;
 import com.savingbooking.model.DepositCard;
+import com.savingbooking.model.SavingBook;
 import com.savingbooking.service.DepositCardService;
+import com.savingbooking.service.SavingBookService;
 import com.savingbooking.view.FxmlView;
 
 import javafx.application.Platform;
@@ -39,11 +39,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 @Controller
 public class DepositCardController implements Initializable {
@@ -82,6 +80,9 @@ public class DepositCardController implements Initializable {
 	private TableColumn<DepositCard, String> colIdCard;
 
 	@FXML
+	private TableColumn<DepositCard, String> colEmail;
+
+	@FXML
 	private TableColumn<DepositCard, String> colDepositAmount;
 
 	@FXML
@@ -96,6 +97,9 @@ public class DepositCardController implements Initializable {
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
+
+	@Autowired
+	SavingBookService savingBookService;
 
 	@Autowired
 	DepositCardService depositCardService;
@@ -134,6 +138,11 @@ public class DepositCardController implements Initializable {
 				depositCard.setIdCard(getIdCard());
 				depositCard.setDepositAmount(getDepositAmount());
 				depositCard.setCreateAt(new Date());
+
+				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
+				depositCard.setSavingBook(savingBook);
+				savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
+				savingBookService.update(savingBook);
 				DepositCard newDepositCard = depositCardService.save(depositCard);
 
 				saveAlert(newDepositCard);
@@ -198,15 +207,15 @@ public class DepositCardController implements Initializable {
 	}
 
 	public String getCustomerName() {
-		return customerName.getText();
+		return customerName.getText().trim();
 	}
 
 	public String getIdCard() {
-		return idCard.getText();
+		return idCard.getText().toString().trim();
 	}
 
 	public Double getDepositAmount() {
-		return Double.valueOf(depositAmount.getText());
+		return Double.valueOf(depositAmount.getText().trim());
 	}
 
 	@Override
@@ -216,33 +225,23 @@ public class DepositCardController implements Initializable {
 
 		setColumnProperties();
 
-		// Add all users into table
 		loadDepositCardDetails();
+
 	}
 
 	private void setColumnProperties() {
-		/*colCreateAt.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Date>() {
-			String pattern = "dd/MM/yyyy";
-			DateTime dateFormatter = DateTime.ofPattern(pattern);
-
-			@Override
-			public String toString(Date date) {
-				if (date != null) {
-					return dateFormatter.format(date);
-				} else {
-					return "";
-				}
-			}
-
-			@Override
-			public LocalDate fromString(String string) {
-				if (string != null && !string.isEmpty()) {
-					return LocalDate.parse(string, dateFormatter);
-				} else {
-					return null;
-				}
-			}
-		}));*/
+		/*
+		 * colCreateAt.setCellFactory(TextFieldTableCell.forTableColumn(new
+		 * StringConverter<Date>() { String pattern = "dd/MM/yyyy"; DateTime
+		 * dateFormatter = DateTime.ofPattern(pattern);
+		 * 
+		 * @Override public String toString(Date date) { if (date != null) {
+		 * return dateFormatter.format(date); } else { return ""; } }
+		 * 
+		 * @Override public LocalDate fromString(String string) { if (string !=
+		 * null && !string.isEmpty()) { return LocalDate.parse(string,
+		 * dateFormatter); } else { return null; } } }));
+		 */
 
 		colDepositCardId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colCustomerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -27,7 +28,7 @@ public class WithdrawCard implements Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name = "id", nullable = false)
-	private Long id;
+	private long id;
 
 	@Column(name = "customer_name", nullable = false)
 	private String customerName;
@@ -36,7 +37,7 @@ public class WithdrawCard implements Serializable {
 	private String idCard;
 
 	@Column(name = "withdraw_amount", nullable = false)
-	private Double withdrawAmount;
+	private double withdrawAmount;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_at")
@@ -48,7 +49,7 @@ public class WithdrawCard implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date updateAt;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "savingbook_id", referencedColumnName = "id")
 	private SavingBook savingBook;
 
@@ -56,19 +57,19 @@ public class WithdrawCard implements Serializable {
 
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public Double getWithdrawAmount() {
+	public double getWithdrawAmount() {
 		return withdrawAmount;
 	}
 
-	public void setWithdrawAmount(Double withdrawAmount) {
+	public void setWithdrawAmount(double withdrawAmount) {
 		this.withdrawAmount = withdrawAmount;
 	}
 

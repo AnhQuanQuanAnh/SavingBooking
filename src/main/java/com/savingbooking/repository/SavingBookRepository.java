@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.savingbooking.model.SavingBook;
 
 @Repository
-public interface SavingBookRepository extends JpaRepository<SavingBook, Long>{
-
+public interface SavingBookRepository extends JpaRepository<SavingBook, Long> {
+	
+	SavingBook findByIdCard(String idCard);
 }

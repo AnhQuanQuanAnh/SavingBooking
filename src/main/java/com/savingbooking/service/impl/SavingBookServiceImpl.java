@@ -50,4 +50,9 @@ public class SavingBookServiceImpl implements SavingBookService {
 		return savingBookRepository.findAll();
 	}
 
+	@Override
+	public SavingBook findByIdCard(String idCard) {
+		return savingBookRepository.findByIdCard(idCard);
+	}
+
 }

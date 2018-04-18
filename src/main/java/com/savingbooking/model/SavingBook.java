@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class SavingBook implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
-	private Long id;
+	private long id;
 
 	@Column(name = "first_name", nullable = false)
 	private String firstName;
@@ -66,7 +67,7 @@ public class SavingBook implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date updateAt;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false)
 	private TypeOfSavingBook typeOfSavingBook;
 
@@ -74,11 +75,11 @@ public class SavingBook implements Serializable {
 
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

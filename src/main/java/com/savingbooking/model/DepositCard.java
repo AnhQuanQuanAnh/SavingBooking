@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -27,7 +28,7 @@ public class DepositCard implements Serializable{
 	@Id
 	@GeneratedValue
 	@Column(name = "id", nullable = false)
-	private Long id;
+	private long id;
 
 	@Column(name = "customer_name", nullable = false)
 	private String customerName;
@@ -36,9 +37,9 @@ public class DepositCard implements Serializable{
 	private String idCard;
 
 	@Column(name = "deposit_amount", nullable = false)
-	private Double depositAmount;
+	private double depositAmount;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_at")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date createAt;
@@ -48,19 +49,19 @@ public class DepositCard implements Serializable{
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date updateAt;
 
-	@ManyToOne
-	@JoinColumn(name = "savingbook_id", referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "savingbook_id", referencedColumnName = "id", nullable = false)
 	private SavingBook savingBook;
 
 	public DepositCard() {
 
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -72,11 +73,11 @@ public class DepositCard implements Serializable{
 		this.customerName = customerName;
 	}
 
-	public Double getDepositAmount() {
+	public double getDepositAmount() {
 		return depositAmount;
 	}
 
-	public void setDepositAmount(Double depositAmount) {
+	public void setDepositAmount(double depositAmount) {
 		this.depositAmount = depositAmount;
 	}
 

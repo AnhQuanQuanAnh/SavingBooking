@@ -28,7 +28,7 @@ public class TypeOfSavingBook implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private long id;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -54,15 +54,15 @@ public class TypeOfSavingBook implements Serializable {
 		this.name = name;
 	}
 
-	public TypeOfSavingBook(Long id) {
+	public TypeOfSavingBook(long id) {
 		this.id = id;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
