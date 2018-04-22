@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.savingbooking.config.StageManager;
-import com.savingbooking.model.DepositCard;
 import com.savingbooking.model.SavingBook;
-import com.savingbooking.service.DepositCardService;
+import com.savingbooking.model.WithdrawCard;
 import com.savingbooking.service.SavingBookService;
+import com.savingbooking.service.WithdrawCardService;
 import com.savingbooking.view.FxmlView;
 
 import javafx.application.Platform;
@@ -44,16 +44,16 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
 @Controller
-public class DepositCardController implements Initializable {
+public class WithdrawCardController implements Initializable {
 
 	@FXML
 	private Button btnLogout;
 
 	@FXML
-	private Label depositCardId;
+	private Label withdrawCardId;
 
 	@FXML
-	private TextField depositAmount;
+	private TextField withdrawAmount;
 
 	@FXML
 	private TextField customerName;
@@ -65,31 +65,31 @@ public class DepositCardController implements Initializable {
 	private Button reset;
 
 	@FXML
-	private Button saveDepositCard;
+	private Button saveWithdrawCard;
 
 	@FXML
-	private TableView<DepositCard> depositCardTable;
+	private TableView<WithdrawCard> withdrawCardTable;
 
 	@FXML
-	private TableColumn<DepositCard, Long> colDepositCardId;
+	private TableColumn<WithdrawCard, Long> colWithdrawCardId;
 
 	@FXML
-	private TableColumn<DepositCard, String> colCustomerName;
+	private TableColumn<WithdrawCard, String> colCustomerName;
 
 	@FXML
-	private TableColumn<DepositCard, String> colIdCard;
+	private TableColumn<WithdrawCard, String> colIdCard;
 
 	@FXML
-	private TableColumn<DepositCard, String> colDepositAmount;
+	private TableColumn<WithdrawCard, String> colWithdrawAmount;
 
 	@FXML
-	private TableColumn<DepositCard, Date> colCreateAt;
+	private TableColumn<WithdrawCard, Date> colCreateAt;
 
 	@FXML
-	private TableColumn<DepositCard, Boolean> colEdit;
+	private TableColumn<WithdrawCard, Boolean> colEdit;
 
 	@FXML
-	private MenuItem deleteDepositCards;
+	private MenuItem deleteWithdrawCards;
 
 	@Lazy
 	@Autowired
@@ -99,9 +99,9 @@ public class DepositCardController implements Initializable {
 	SavingBookService savingBookService;
 
 	@Autowired
-	DepositCardService depositCardService;
+	WithdrawCardService withdrawCardService;
 
-	private ObservableList<DepositCard> depositCardList = FXCollections.observableArrayList();
+	private ObservableList<WithdrawCard> withdrawCardList = FXCollections.observableArrayList();
 
 	@FXML
 	private void exit(ActionEvent event) {
@@ -122,47 +122,47 @@ public class DepositCardController implements Initializable {
 	}
 
 	@FXML
-	private void saveDepositCard(ActionEvent event) {
+	private void saveWithdrawCard(ActionEvent event) {
 
 		if (validate("Customer Name", getCustomerName(), "[a-zA-Z]+")
 				&& emptyValidation("Customer Name", customerName.getText().isEmpty())
-				&& emptyValidation("Deposit Number", getDepositAmount() == null)) {
+				&& emptyValidation("Withdraw Number", getWithdrawAmount() == null)) {
 
-			if (depositCardId.getText() == null || depositCardId.getText() == "") {
+			if (withdrawCardId.getText() == null || withdrawCardId.getText() == "") {
 
-				DepositCard depositCard = new DepositCard();
-				depositCard.setCustomerName(getCustomerName());
-				depositCard.setIdCard(getIdCard());
-				depositCard.setDepositAmount(getDepositAmount());
-				depositCard.setCreateAt(new Date());
+				WithdrawCard withdrawCard = new WithdrawCard();
+				withdrawCard.setCustomerName(getCustomerName());
+				withdrawCard.setIdCard(getIdCard());
+				withdrawCard.setWithdrawAmount(getWithdrawAmount());
+				withdrawCard.setCreateAt(new Date());
 
 				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
-				depositCard.setSavingBook(savingBook);
-				savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
+				withdrawCard.setSavingBook(savingBook);
+				savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
 				savingBookService.update(savingBook);
-				DepositCard newDepositCard = depositCardService.save(depositCard);
+				WithdrawCard newWithdrawCard = withdrawCardService.save(withdrawCard);
 
-				saveAlert(newDepositCard);
+				saveAlert(newWithdrawCard);
 
 			} else {
-				DepositCard depositCard = depositCardService.find(Long.parseLong(depositCardId.getText()));
-				depositCard.setCustomerName(getCustomerName());
-				depositCard.setIdCard(getIdCard());
-				depositCard.setDepositAmount(getDepositAmount());
-				depositCard.setUpdateAt(new Date());
-				DepositCard updatedDepositCard = depositCardService.update(depositCard);
-				updateAlert(updatedDepositCard);
+				WithdrawCard withdrawCard = withdrawCardService.find(Long.parseLong(withdrawCardId.getText()));
+				withdrawCard.setCustomerName(getCustomerName());
+				withdrawCard.setIdCard(getIdCard());
+				withdrawCard.setWithdrawAmount(getWithdrawAmount());
+				withdrawCard.setUpdateAt(new Date());
+				WithdrawCard updatedWithdrawCard = withdrawCardService.update(withdrawCard);
+				updateAlert(updatedWithdrawCard);
 			}
 
 			clearFields();
-			loadDepositCardDetails();
+			loadWithdrawCardDetails();
 		}
 
 	}
 
 	@FXML
-	private void deleteDepositCards(ActionEvent event) {
-		List<DepositCard> depositCards = depositCardTable.getSelectionModel().getSelectedItems();
+	private void deleteWithdrawCards(ActionEvent event) {
+		List<WithdrawCard> withdrawCards = withdrawCardTable.getSelectionModel().getSelectedItems();
 
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation Dialog");
@@ -171,87 +171,75 @@ public class DepositCardController implements Initializable {
 		Optional<ButtonType> action = alert.showAndWait();
 
 		if (action.get() == ButtonType.OK)
-			depositCardService.deleteInBatch(depositCards);
+			withdrawCardService.deleteInBatch(withdrawCards);
 
-		loadDepositCardDetails();
+		loadWithdrawCardDetails();
 	}
 
 	private void clearFields() {
-		depositCardId.setText(null);
+		withdrawCardId.setText(null);
 		customerName.clear();
 		idCard.clear();
-		depositAmount.clear();
+		withdrawAmount.clear();
 	}
 
-	private void saveAlert(DepositCard depositCard) {
+	private void saveAlert(WithdrawCard withdrawCard) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Deposit card saved successfully.");
+		alert.setTitle("Withdraw card saved successfully.");
 		alert.setHeaderText(null);
-		alert.setContentText("The deposit card with " + depositCard.getCustomerName() + " has been created and \n"
-				+ " id is " + depositCard.getId() + ".");
+		alert.setContentText("The withdraw card with " + withdrawCard.getCustomerName() + " has been created and \n"
+				+ " id is " + withdrawCard.getId() + ".");
 		alert.showAndWait();
 	}
 
-	private void updateAlert(DepositCard depositCard) {
+	private void updateAlert(WithdrawCard withdrawCard) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Deposit updated successfully.");
+		alert.setTitle("Withdraw card updated successfully.");
 		alert.setHeaderText(null);
 		alert.setContentText(
-				"The deposit card with customer name " + depositCard.getCustomerName() + " has been updated.");
+				"The withdraw card with customer name " + withdrawCard.getCustomerName() + " has been updated.");
 		alert.showAndWait();
 	}
 
 	public String getCustomerName() {
-		return customerName.getText().trim();
+		return customerName.getText();
 	}
 
 	public String getIdCard() {
 		return idCard.getText().toString().trim();
 	}
 
-	public Double getDepositAmount() {
-		return Double.valueOf(depositAmount.getText().trim());
+	public Double getWithdrawAmount() {
+		return Double.valueOf(withdrawAmount.getText().trim());
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		depositCardTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		withdrawCardTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		setColumnProperties();
 
-		loadDepositCardDetails();
+		loadWithdrawCardDetails();
 
 	}
 
 	private void setColumnProperties() {
-		/*
-		 * colCreateAt.setCellFactory(TextFieldTableCell.forTableColumn(new
-		 * StringConverter<Date>() { String pattern = "dd/MM/yyyy"; DateTime
-		 * dateFormatter = DateTime.ofPattern(pattern);
-		 * 
-		 * @Override public String toString(Date date) { if (date != null) {
-		 * return dateFormatter.format(date); } else { return ""; } }
-		 * 
-		 * @Override public LocalDate fromString(String string) { if (string !=
-		 * null && !string.isEmpty()) { return LocalDate.parse(string,
-		 * dateFormatter); } else { return null; } } }));
-		 */
 
-		colDepositCardId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colWithdrawCardId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colCustomerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 		colIdCard.setCellValueFactory(new PropertyValueFactory<>("idCard"));
-		colDepositAmount.setCellValueFactory(new PropertyValueFactory<>("depositAmount"));
+		colWithdrawAmount.setCellValueFactory(new PropertyValueFactory<>("withdrawAmount"));
 		colCreateAt.setCellValueFactory(new PropertyValueFactory<>("createAt"));
 		colEdit.setCellFactory(cellFactory);
 	}
 
-	Callback<TableColumn<DepositCard, Boolean>, TableCell<DepositCard, Boolean>> cellFactory = new Callback<TableColumn<DepositCard, Boolean>, TableCell<DepositCard, Boolean>>() {
+	Callback<TableColumn<WithdrawCard, Boolean>, TableCell<WithdrawCard, Boolean>> cellFactory = new Callback<TableColumn<WithdrawCard, Boolean>, TableCell<WithdrawCard, Boolean>>() {
 		@Override
-		public TableCell<DepositCard, Boolean> call(final TableColumn<DepositCard, Boolean> param) {
-			final TableCell<DepositCard, Boolean> cell = new TableCell<DepositCard, Boolean>() {
+		public TableCell<WithdrawCard, Boolean> call(final TableColumn<WithdrawCard, Boolean> param) {
+			final TableCell<WithdrawCard, Boolean> cell = new TableCell<WithdrawCard, Boolean>() {
 				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
 				final Button btnEdit = new Button();
 
@@ -263,8 +251,8 @@ public class DepositCardController implements Initializable {
 						setText(null);
 					} else {
 						btnEdit.setOnAction(e -> {
-							DepositCard depositCard = getTableView().getItems().get(getIndex());
-							updateDepositCard(depositCard);
+							WithdrawCard withdrawCard = getTableView().getItems().get(getIndex());
+							updateWithdrawCard(withdrawCard);
 						});
 
 						btnEdit.setStyle("-fx-background-color: transparent;");
@@ -280,19 +268,19 @@ public class DepositCardController implements Initializable {
 					}
 				}
 
-				private void updateDepositCard(DepositCard depositCard) {
-					depositCardId.setText(Long.toString(depositCard.getId()));
+				private void updateWithdrawCard(WithdrawCard withdrawCard) {
+					withdrawCardId.setText(Long.toString(withdrawCard.getId()));
 				}
 			};
 			return cell;
 		}
 	};
 
-	private void loadDepositCardDetails() {
-		depositCardList.clear();
-		depositCardList.addAll(depositCardService.findAll());
+	private void loadWithdrawCardDetails() {
+		withdrawCardList.clear();
+		withdrawCardList.addAll(withdrawCardService.findAll());
 
-		depositCardTable.setItems(depositCardList);
+		withdrawCardTable.setItems(withdrawCardList);
 	}
 
 	/*
@@ -337,5 +325,4 @@ public class DepositCardController implements Initializable {
 		}
 		alert.showAndWait();
 	}
-
 }
