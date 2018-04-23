@@ -124,7 +124,7 @@ public class WithdrawCardController implements Initializable {
 	@FXML
 	private void saveWithdrawCard(ActionEvent event) {
 
-		if (validate("Customer Name", getCustomerName(), "[a-zA-Z]+")
+		if (validate("Customer Name", getCustomerName(), "[a-zA-Z ' ']+")
 				&& emptyValidation("Customer Name", customerName.getText().isEmpty())
 				&& emptyValidation("Withdraw Number", getWithdrawAmount() == null)) {
 
@@ -150,6 +150,11 @@ public class WithdrawCardController implements Initializable {
 				withdrawCard.setIdCard(getIdCard());
 				withdrawCard.setWithdrawAmount(getWithdrawAmount());
 				withdrawCard.setUpdateAt(new Date());
+				
+				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
+				withdrawCard.setSavingBook(savingBook);
+				savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
+				savingBookService.update(savingBook);
 				WithdrawCard updatedWithdrawCard = withdrawCardService.update(withdrawCard);
 				updateAlert(updatedWithdrawCard);
 			}
@@ -204,7 +209,7 @@ public class WithdrawCardController implements Initializable {
 	}
 
 	public String getCustomerName() {
-		return customerName.getText();
+		return customerName.getText().trim();
 	}
 
 	public String getIdCard() {
@@ -315,14 +320,11 @@ public class WithdrawCardController implements Initializable {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Validation Error");
 		alert.setHeaderText(null);
-		if (field.equals("Role"))
-			alert.setContentText("Please Select " + field);
-		else {
-			if (empty)
-				alert.setContentText("Please Enter " + field);
-			else
-				alert.setContentText("Please Enter Valid " + field);
-		}
+		if (empty)
+			alert.setContentText("Please Enter " + field);
+		else
+			alert.setContentText("Please Enter Valid " + field);
+
 		alert.showAndWait();
 	}
 }

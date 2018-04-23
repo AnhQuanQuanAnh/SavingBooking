@@ -124,7 +124,7 @@ public class DepositCardController implements Initializable {
 	@FXML
 	private void saveDepositCard(ActionEvent event) {
 
-		if (validate("Customer Name", getCustomerName(), "[a-zA-Z]+")
+		if (validate("Customer Name", getCustomerName(), "[a-zA-Z ' ']+")
 				&& emptyValidation("Customer Name", customerName.getText().isEmpty())
 				&& emptyValidation("Deposit Number", getDepositAmount() == null)) {
 
@@ -150,6 +150,11 @@ public class DepositCardController implements Initializable {
 				depositCard.setIdCard(getIdCard());
 				depositCard.setDepositAmount(getDepositAmount());
 				depositCard.setUpdateAt(new Date());
+				
+				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
+				depositCard.setSavingBook(savingBook);
+				savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
+				savingBookService.update(savingBook);
 				DepositCard updatedDepositCard = depositCardService.update(depositCard);
 				updateAlert(updatedDepositCard);
 			}
@@ -327,14 +332,10 @@ public class DepositCardController implements Initializable {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Validation Error");
 		alert.setHeaderText(null);
-		if (field.equals("Role"))
-			alert.setContentText("Please Select " + field);
-		else {
-			if (empty)
-				alert.setContentText("Please Enter " + field);
-			else
-				alert.setContentText("Please Enter Valid " + field);
-		}
+		if (empty)
+			alert.setContentText("Please Enter " + field);
+		else
+			alert.setContentText("Please Enter Valid " + field);
 		alert.showAndWait();
 	}
 

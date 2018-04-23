@@ -366,7 +366,7 @@ public class SavingBookController implements Initializable {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Validation Error");
 		alert.setHeaderText(null);
-		if (field.equals("Role"))
+		if (field.equals("Select type of savingbook"))
 			alert.setContentText("Please Select " + field);
 		else {
 			if (empty)
@@ -400,7 +400,7 @@ public class SavingBookController implements Initializable {
 
 	@FXML
 	private void saveSavingBook(ActionEvent event) {
-		if (validate("First Name", getFirstName(), "[a-zA-Z]+") && validate("Last Name", getLastName(), "[a-zA-Z]+")
+		if (validate("First Name", getFirstName(), "[a-zA-Z ' ']+") && validate("Last Name", getLastName(), "[a-zA-Z ' ']+")
 				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())) {
 
 			if (savingbookId.getText() == null || savingbookId.getText() == "") {

@@ -153,7 +153,7 @@ public class UserController implements Initializable {
 	@FXML
 	private void saveUser(ActionEvent event) {
 
-		if (validate("First Name", getFirstName(), "[a-zA-Z]+") && validate("Last Name", getLastName(), "[a-zA-Z]+")
+		if (validate("First Name", getFirstName(), "[a-zA-Z ' ']+") && validate("Last Name", getLastName(), "[a-zA-Z ' ']+")
 				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())
 				&& emptyValidation("Role", getRole() == null)) {
 
