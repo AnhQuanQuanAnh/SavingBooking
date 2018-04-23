@@ -132,6 +132,19 @@ public class UserController implements Initializable {
 	private ObservableList<User> userList = FXCollections.observableArrayList();
 	private ObservableList<String> roles = FXCollections.observableArrayList("Admin", "User");
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		cbRole.setItems(roles);
+
+		userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+		setColumnProperties();
+
+		// Add all users into table
+		loadUserDetails();
+	}
+
 	@FXML
 	private void exit(ActionEvent event) {
 		Platform.exit();
@@ -150,10 +163,43 @@ public class UserController implements Initializable {
 		clearFields();
 	}
 
+	private String getGenderTitle(String gender) {
+		return (gender.equals("Male")) ? "his" : "her";
+	}
+
+	public String getFirstName() {
+		return firstName.getText();
+	}
+
+	public String getLastName() {
+		return lastName.getText();
+	}
+
+	public LocalDate getDob() {
+		return dob.getValue();
+	}
+
+	public String getGender() {
+		return rbMale.isSelected() ? "Male" : "Female";
+	}
+
+	public String getRole() {
+		return cbRole.getSelectionModel().getSelectedItem();
+	}
+
+	public String getEmail() {
+		return email.getText();
+	}
+
+	public String getPassword() {
+		return password.getText();
+	}
+
 	@FXML
 	private void saveUser(ActionEvent event) {
 
-		if (validate("First Name", getFirstName(), "[a-zA-Z ' ']+") && validate("Last Name", getLastName(), "[a-zA-Z ' ']+")
+		if (validate("First Name", getFirstName(), "[a-zA-Z ' ']+")
+				&& validate("Last Name", getLastName(), "[a-zA-Z ' ']+")
 				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())
 				&& emptyValidation("Role", getRole() == null)) {
 
@@ -207,82 +253,6 @@ public class UserController implements Initializable {
 		if (action.get() == ButtonType.OK)
 			userService.deleteInBatch(users);
 
-		loadUserDetails();
-	}
-
-	private void clearFields() {
-		userId.setText(null);
-		firstName.clear();
-		lastName.clear();
-		dob.getEditor().clear();
-		rbMale.setSelected(true);
-		rbFemale.setSelected(false);
-		cbRole.getSelectionModel().clearSelection();
-		email.clear();
-		password.clear();
-	}
-
-	private void saveAlert(User user) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User saved successfully.");
-		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getFirstName() + " " + user.getLastName() + " has been created and \n"
-				+ getGenderTitle(user.getGender()) + " id is " + user.getId() + ".");
-		alert.showAndWait();
-	}
-
-	private void updateAlert(User user) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User updated successfully.");
-		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getFirstName() + " " + user.getLastName() + " has been updated.");
-		alert.showAndWait();
-	}
-
-	private String getGenderTitle(String gender) {
-		return (gender.equals("Male")) ? "his" : "her";
-	}
-
-	public String getFirstName() {
-		return firstName.getText();
-	}
-
-	public String getLastName() {
-		return lastName.getText();
-	}
-
-	public LocalDate getDob() {
-		return dob.getValue();
-	}
-
-	public String getGender() {
-		return rbMale.isSelected() ? "Male" : "Female";
-	}
-
-	public String getRole() {
-		return cbRole.getSelectionModel().getSelectedItem();
-	}
-
-	public String getEmail() {
-		return email.getText();
-	}
-
-	public String getPassword() {
-		return password.getText();
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
-		cbRole.setItems(roles);
-
-		userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-		setColumnProperties();
-
-		// Add all users into table
 		loadUserDetails();
 	}
 
@@ -380,6 +350,39 @@ public class UserController implements Initializable {
 		userList.addAll(userService.findAll());
 
 		userTable.setItems(userList);
+	}
+
+	private void clearFields() {
+		userId.setText(null);
+		firstName.clear();
+		lastName.clear();
+		dob.getEditor().clear();
+		rbMale.setSelected(true);
+		rbFemale.setSelected(false);
+		cbRole.getSelectionModel().clearSelection();
+		email.clear();
+		password.clear();
+		email.setEditable(false);
+		password.setEditable(false);
+	}
+
+	private void saveAlert(User user) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("User saved successfully.");
+		alert.setHeaderText(null);
+		alert.setContentText("The user " + user.getFirstName() + " " + user.getLastName() + " has been created and \n"
+				+ getGenderTitle(user.getGender()) + " id is " + user.getId() + ".");
+		alert.showAndWait();
+	}
+
+	private void updateAlert(User user) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("User updated successfully.");
+		alert.setHeaderText(null);
+		alert.setContentText("The user " + user.getFirstName() + " " + user.getLastName() + " has been updated.");
+		alert.showAndWait();
 	}
 
 	/*

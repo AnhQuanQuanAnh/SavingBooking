@@ -172,6 +172,65 @@ public class SavingBookController implements Initializable {
 		loadSavingBookDetails();
 	}
 
+	@FXML
+	private void exit(ActionEvent event) {
+		Platform.exit();
+	}
+
+	@FXML
+	private void logout(ActionEvent event) throws IOException {
+		stageManager.switchScene(FxmlView.LOGIN);
+	}
+
+	@FXML
+	void reset(ActionEvent event) {
+		clearFields();
+	}
+
+	public String getFirstName() {
+		return firstName.getText().trim();
+	}
+
+	public String getLastName() {
+		return lastName.getText().trim();
+	}
+
+	public LocalDate getDob() {
+		return dob.getValue();
+	}
+
+	public String getGender() {
+		return rbMale.isSelected() ? "Male" : "Female";
+	}
+
+	public String getEmail() {
+		return email.getText().trim();
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber.getText().trim();
+	}
+
+	public String getIdCard() {
+		return idCard.getText().trim();
+	}
+
+	public String getAddress() {
+		return address.getText().trim();
+	}
+
+	public Double getDepositNumber() {
+		return Double.parseDouble(depositNumber.getText().trim());
+	}
+
+	public TypeOfSavingBook getTypeOfSavingBook() {
+		return cbTypeOfSavingBook.getValue();
+	}
+
+	private String getGenderTitle(String gender) {
+		return (gender.equals("Male")) ? "his" : "her";
+	}
+
 	private void setColumnProperties() {
 		colDOB.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<LocalDate>() {
 			String pattern = "dd/MM/yyyy";
@@ -264,144 +323,11 @@ public class SavingBookController implements Initializable {
 	};
 
 	@FXML
-	private void exit(ActionEvent event) {
-		Platform.exit();
-	}
-
-	@FXML
-	private void logout(ActionEvent event) throws IOException {
-		stageManager.switchScene(FxmlView.LOGIN);
-	}
-
-	@FXML
-	void reset(ActionEvent event) {
-		clearFields();
-	}
-
-	private void clearFields() {
-		savingbookId.setText(null);
-		firstName.clear();
-		lastName.clear();
-		dob.getEditor().clear();
-		rbMale.setSelected(true);
-		rbFemale.setSelected(false);
-		email.clear();
-		idCard.clear();
-		phoneNumber.clear();
-		depositNumber.clear();
-		address.clear();
-		cbTypeOfSavingBook.getSelectionModel().clearSelection();
-	}
-
-	public String getFirstName() {
-		return firstName.getText().trim();
-	}
-
-	public String getLastName() {
-		return lastName.getText().trim();
-	}
-
-	public LocalDate getDob() {
-		return dob.getValue();
-	}
-
-	public String getGender() {
-		return rbMale.isSelected() ? "Male" : "Female";
-	}
-
-	public String getEmail() {
-		return email.getText().trim();
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber.getText().trim();
-	}
-
-	public String getIdCard() {
-		return idCard.getText().trim();
-	}
-
-	public String getAddress() {
-		return address.getText().trim();
-	}
-
-	public Double getDepositNumber() {
-		return Double.parseDouble(depositNumber.getText().trim());
-	}
-
-	public TypeOfSavingBook getTypeOfSavingBook() {
-		return cbTypeOfSavingBook.getValue();
-	}
-
-	private String getGenderTitle(String gender) {
-		return (gender.equals("Male")) ? "his" : "her";
-	}
-
-	private boolean validate(String field, String value, String pattern) {
-		if (!value.isEmpty()) {
-			Pattern p = Pattern.compile(pattern);
-			Matcher m = p.matcher(value);
-			if (m.find() && m.group().equals(value)) {
-				return true;
-			} else {
-				validationAlert(field, false);
-				return false;
-			}
-		} else {
-			validationAlert(field, true);
-			return false;
-		}
-	}
-
-	private boolean emptyValidation(String field, boolean empty) {
-		if (!empty) {
-			return true;
-		} else {
-			validationAlert(field, true);
-			return false;
-		}
-	}
-
-	private void validationAlert(String field, boolean empty) {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Validation Error");
-		alert.setHeaderText(null);
-		if (field.equals("Select type of savingbook"))
-			alert.setContentText("Please Select " + field);
-		else {
-			if (empty)
-				alert.setContentText("Please Enter " + field);
-			else
-				alert.setContentText("Please Enter Valid " + field);
-		}
-		alert.showAndWait();
-	}
-
-	private void saveAlert(SavingBook savingBook) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("SavingBook saved successfully.");
-		alert.setHeaderText(null);
-		alert.setContentText("The savingbook of " + savingBook.getFirstName() + " " + savingBook.getLastName()
-				+ " has been created and \n" + getGenderTitle(savingBook.getGender()) + " id is " + savingBook.getId()
-				+ ".");
-		alert.showAndWait();
-	}
-
-	private void updateAlert(SavingBook savingBook) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("SavingBook updated successfully.");
-		alert.setHeaderText(null);
-		alert.setContentText("The savingbook of " + savingBook.getFirstName() + " " + savingBook.getLastName()
-				+ " has been updated.");
-		alert.showAndWait();
-	}
-
-	@FXML
 	private void saveSavingBook(ActionEvent event) {
-		if (validate("First Name", getFirstName(), "[a-zA-Z ' ']+") && validate("Last Name", getLastName(), "[a-zA-Z ' ']+")
-				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())) {
+		if (validate("First Name", getFirstName(), "[a-zA-Z ' ']+")
+				&& validate("Last Name", getLastName(), "[a-zA-Z ' ']+")
+				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())
+				&& emptyValidation("Type of savingbook", getTypeOfSavingBook() == null)) {
 
 			if (savingbookId.getText() == null || savingbookId.getText() == "") {
 				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")) {
@@ -460,6 +386,82 @@ public class SavingBookController implements Initializable {
 		savingbookList.clear();
 		savingbookList.addAll(savingBookService.findAll());
 		savingbookTable.setItems(savingbookList);
+	}
+
+	private boolean validate(String field, String value, String pattern) {
+		if (!value.isEmpty()) {
+			Pattern p = Pattern.compile(pattern);
+			Matcher m = p.matcher(value);
+			if (m.find() && m.group().equals(value)) {
+				return true;
+			} else {
+				validationAlert(field, false);
+				return false;
+			}
+		} else {
+			validationAlert(field, true);
+			return false;
+		}
+	}
+
+	private boolean emptyValidation(String field, boolean empty) {
+		if (!empty) {
+			return true;
+		} else {
+			validationAlert(field, true);
+			return false;
+		}
+	}
+
+	private void validationAlert(String field, boolean empty) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Validation Error");
+		alert.setHeaderText(null);
+		if (field.equals("Type of savingbook"))
+			alert.setContentText("Please Select " + field);
+		else {
+			if (empty)
+				alert.setContentText("Please Enter " + field);
+			else
+				alert.setContentText("Please Enter Valid " + field);
+		}
+		alert.showAndWait();
+	}
+
+	private void saveAlert(SavingBook savingBook) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("SavingBook saved successfully.");
+		alert.setHeaderText(null);
+		alert.setContentText("The savingbook of " + savingBook.getFirstName() + " " + savingBook.getLastName()
+				+ " has been created and \n" + getGenderTitle(savingBook.getGender()) + " id is " + savingBook.getId()
+				+ ".");
+		alert.showAndWait();
+	}
+
+	private void updateAlert(SavingBook savingBook) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("SavingBook updated successfully.");
+		alert.setHeaderText(null);
+		alert.setContentText("The savingbook of " + savingBook.getFirstName() + " " + savingBook.getLastName()
+				+ " has been updated.");
+		alert.showAndWait();
+	}
+
+	private void clearFields() {
+		savingbookId.setText(null);
+		firstName.clear();
+		lastName.clear();
+		dob.getEditor().clear();
+		rbMale.setSelected(true);
+		rbFemale.setSelected(false);
+		email.clear();
+		idCard.clear();
+		phoneNumber.clear();
+		depositNumber.clear();
+		address.clear();
+		cbTypeOfSavingBook.getSelectionModel().clearSelection();
 	}
 
 }
