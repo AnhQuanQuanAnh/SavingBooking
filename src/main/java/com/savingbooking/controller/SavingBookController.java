@@ -256,7 +256,7 @@ public class SavingBookController implements Initializable {
 						rbMale.setSelected(true);
 					else
 						rbFemale.setSelected(true);
-					cbTypeOfSavingBook.getSelectionModel().select(getTypeOfSavingBook());
+					cbTypeOfSavingBook.getSelectionModel().select(savingbook.getTypeOfSavingBook());
 				}
 			};
 			return cell;

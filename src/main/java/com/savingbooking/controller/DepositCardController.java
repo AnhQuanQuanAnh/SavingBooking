@@ -137,6 +137,13 @@ public class DepositCardController implements Initializable {
 				depositCard.setCreateAt(new Date());
 
 				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
+				if (savingBook == null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText("Id card is not registered on the system");
+					alert.showAndWait();
+				}
 				depositCard.setSavingBook(savingBook);
 				savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
 				savingBookService.update(savingBook);
@@ -150,8 +157,15 @@ public class DepositCardController implements Initializable {
 				depositCard.setIdCard(getIdCard());
 				depositCard.setDepositAmount(getDepositAmount());
 				depositCard.setUpdateAt(new Date());
-				
+
 				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
+				if (savingBook == null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText("Id card is not registered on the system");
+					alert.showAndWait();
+				}
 				depositCard.setSavingBook(savingBook);
 				savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
 				savingBookService.update(savingBook);
@@ -232,18 +246,6 @@ public class DepositCardController implements Initializable {
 	}
 
 	private void setColumnProperties() {
-		/*
-		 * colCreateAt.setCellFactory(TextFieldTableCell.forTableColumn(new
-		 * StringConverter<Date>() { String pattern = "dd/MM/yyyy"; DateTime
-		 * dateFormatter = DateTime.ofPattern(pattern);
-		 * 
-		 * @Override public String toString(Date date) { if (date != null) {
-		 * return dateFormatter.format(date); } else { return ""; } }
-		 * 
-		 * @Override public LocalDate fromString(String string) { if (string !=
-		 * null && !string.isEmpty()) { return LocalDate.parse(string,
-		 * dateFormatter); } else { return null; } } }));
-		 */
 
 		colDepositCardId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colCustomerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
@@ -287,6 +289,9 @@ public class DepositCardController implements Initializable {
 
 				private void updateDepositCard(DepositCard depositCard) {
 					depositCardId.setText(Long.toString(depositCard.getId()));
+					customerName.setText(depositCard.getCustomerName());
+					idCard.setText(depositCard.getIdCard());
+					depositAmount.setText(String.valueOf(depositCard.getDepositAmount()));
 				}
 			};
 			return cell;

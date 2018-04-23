@@ -137,6 +137,13 @@ public class WithdrawCardController implements Initializable {
 				withdrawCard.setCreateAt(new Date());
 
 				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
+				if (savingBook == null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText("Id card is not registered on the system");
+					alert.showAndWait();
+				}
 				withdrawCard.setSavingBook(savingBook);
 				savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
 				savingBookService.update(savingBook);
@@ -150,8 +157,15 @@ public class WithdrawCardController implements Initializable {
 				withdrawCard.setIdCard(getIdCard());
 				withdrawCard.setWithdrawAmount(getWithdrawAmount());
 				withdrawCard.setUpdateAt(new Date());
-				
+
 				SavingBook savingBook = savingBookService.findByIdCard(getIdCard());
+				if (savingBook == null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText("Id card is not registered on the system");
+					alert.showAndWait();
+				}
 				withdrawCard.setSavingBook(savingBook);
 				savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
 				savingBookService.update(savingBook);
@@ -275,6 +289,9 @@ public class WithdrawCardController implements Initializable {
 
 				private void updateWithdrawCard(WithdrawCard withdrawCard) {
 					withdrawCardId.setText(Long.toString(withdrawCard.getId()));
+					customerName.setText(withdrawCard.getCustomerName());
+					idCard.setText(withdrawCard.getIdCard());
+					withdrawAmount.setText(String.valueOf(withdrawCard.getWithdrawAmount()));
 				}
 			};
 			return cell;
