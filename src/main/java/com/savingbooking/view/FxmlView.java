@@ -8,7 +8,7 @@ public enum FxmlView {
 
 		@Override
 		public String getTitle() {
-			return getStringFromResourceBundle("user.title");
+			return getStringFromResourceBundle("dashboard.title");
 
 		}
 
@@ -76,13 +76,13 @@ public enum FxmlView {
 	REPORT {
 		@Override
 		public String getTitle() {
-			return null;
+			return getStringFromResourceBundle("report.title");
+
 		}
 
 		@Override
 		public String getFxmlFile() {
-			// TODO Auto-generated method stub
-			return null;
+			return "/fxml/Report.fxml";
 		}
 	};
 

@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import com.savingbooking.config.StageManager;
 import com.savingbooking.view.FxmlView;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
@@ -50,35 +48,27 @@ public class DashBoardController implements Initializable {
 	}
 
 	@FXML
-	private void GoToAccoundPage(ActionEvent event) throws IOException {
-		imageViewAccount.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				System.out.println("Tile pressed ");
-				event.consume();
-				stageManager.switchScene(FxmlView.USER);
-			}
-		});
-
+	private void GoToAccoundPage(MouseEvent event) throws IOException {
+		stageManager.switchScene(FxmlView.USER);
 	}
 
 	@FXML
-	private void GoToDepositPage(ActionEvent event) throws IOException {
+	private void GoToDepositPage(MouseEvent event) throws IOException {
 		stageManager.switchScene(FxmlView.DEPOSITCARD);
 	}
 
 	@FXML
-	private void GoToSavingBookPage(ActionEvent event) throws IOException {
+	private void GoToSavingBookPage(MouseEvent event) throws IOException {
 		stageManager.switchScene(FxmlView.SAVINGBOOK);
 	}
 
 	@FXML
-	private void GoToWithdrawCardPage(ActionEvent event) throws IOException {
+	private void GoToWithdrawCardPage(MouseEvent event) throws IOException {
 		stageManager.switchScene(FxmlView.WITHDRAWCARD);
 	}
 
 	@FXML
-	private void GoToReportPage(ActionEvent event) throws IOException {
+	private void GoToReportPage(MouseEvent event) throws IOException {
 		stageManager.switchScene(FxmlView.REPORT);
 	}
 
