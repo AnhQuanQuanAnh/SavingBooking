@@ -46,7 +46,7 @@ public class LoginController implements Initializable {
 	private void login(ActionEvent event) throws IOException {
 		if (userService.authenticate(getUsername(), getPassword())) {
 
-			stageManager.switchScene(FxmlView.WITHDRAWCARD);
+			stageManager.switchScene(FxmlView.DEPOSITCARD);
 
 		} else {
 			lblLogin.setText("Login Failed.");
@@ -54,11 +54,11 @@ public class LoginController implements Initializable {
 	}
 
 	public String getPassword() {
-		return password.getText();
+		return password.getText().trim();
 	}
 
 	public String getUsername() {
-		return username.getText();
+		return username.getText().trim();
 	}
 
 	@Override

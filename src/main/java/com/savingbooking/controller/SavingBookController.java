@@ -94,7 +94,13 @@ public class SavingBookController implements Initializable {
 	private TextField email;
 
 	@FXML
+	private TextField searchId;
+
+	@FXML
 	private ComboBox<TypeOfSavingBook> cbTypeOfSavingBook;
+
+	@FXML
+	private Button search;
 
 	@FXML
 	private Button reset;
@@ -229,6 +235,10 @@ public class SavingBookController implements Initializable {
 
 	private String getGenderTitle(String gender) {
 		return (gender.equals("Male")) ? "his" : "her";
+	}
+
+	public String getSearchById() {
+		return searchId.getText().trim();
 	}
 
 	private void setColumnProperties() {
@@ -380,6 +390,22 @@ public class SavingBookController implements Initializable {
 			savingBookService.deleteInBatch(savingBooks);
 
 		loadSavingBookDetails();
+	}
+
+	@FXML
+	private void findSavingBook(ActionEvent event) {
+		SavingBook savingBook = savingBookService.findByIdCard(getSearchById());
+		if (savingBook == null) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("Savingbook with id card " + getSearchById() + " not found");
+			alert.showAndWait();
+		} else {
+			savingbookList.clear();
+			savingbookList.add(savingBook);
+			savingbookTable.setItems(savingbookList);
+		}
 	}
 
 	private void loadSavingBookDetails() {

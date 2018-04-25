@@ -143,13 +143,14 @@ public class WithdrawCardController implements Initializable {
 					alert.setHeaderText(null);
 					alert.setContentText("Id card is not registered on the system");
 					alert.showAndWait();
+				} else {
+					withdrawCard.setSavingBook(savingBook);
+					savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
+					savingBookService.update(savingBook);
+					WithdrawCard newWithdrawCard = withdrawCardService.save(withdrawCard);
+					saveAlert(newWithdrawCard);
+					clearFields();
 				}
-				withdrawCard.setSavingBook(savingBook);
-				savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
-				savingBookService.update(savingBook);
-				WithdrawCard newWithdrawCard = withdrawCardService.save(withdrawCard);
-
-				saveAlert(newWithdrawCard);
 
 			} else {
 				WithdrawCard withdrawCard = withdrawCardService.find(Long.parseLong(withdrawCardId.getText()));
@@ -165,15 +166,15 @@ public class WithdrawCardController implements Initializable {
 					alert.setHeaderText(null);
 					alert.setContentText("Id card is not registered on the system");
 					alert.showAndWait();
+				} else {
+					withdrawCard.setSavingBook(savingBook);
+					savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
+					savingBookService.update(savingBook);
+					WithdrawCard updatedWithdrawCard = withdrawCardService.update(withdrawCard);
+					updateAlert(updatedWithdrawCard);
+					clearFields();
 				}
-				withdrawCard.setSavingBook(savingBook);
-				savingBook.setDeposit(savingBook.getDeposit() - getWithdrawAmount());
-				savingBookService.update(savingBook);
-				WithdrawCard updatedWithdrawCard = withdrawCardService.update(withdrawCard);
-				updateAlert(updatedWithdrawCard);
 			}
-
-			clearFields();
 			loadWithdrawCardDetails();
 		}
 

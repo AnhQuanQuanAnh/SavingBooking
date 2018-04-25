@@ -143,14 +143,14 @@ public class DepositCardController implements Initializable {
 					alert.setHeaderText(null);
 					alert.setContentText("Id card is not registered on the system");
 					alert.showAndWait();
+				} else {
+					depositCard.setSavingBook(savingBook);
+					savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
+					savingBookService.update(savingBook);
+					DepositCard newDepositCard = depositCardService.save(depositCard);
+					saveAlert(newDepositCard);
+					clearFields();
 				}
-				depositCard.setSavingBook(savingBook);
-				savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
-				savingBookService.update(savingBook);
-				DepositCard newDepositCard = depositCardService.save(depositCard);
-
-				saveAlert(newDepositCard);
-
 			} else {
 				DepositCard depositCard = depositCardService.find(Long.parseLong(depositCardId.getText()));
 				depositCard.setCustomerName(getCustomerName());
@@ -165,18 +165,17 @@ public class DepositCardController implements Initializable {
 					alert.setHeaderText(null);
 					alert.setContentText("Id card is not registered on the system");
 					alert.showAndWait();
+				} else {
+					depositCard.setSavingBook(savingBook);
+					savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
+					savingBookService.update(savingBook);
+					DepositCard updatedDepositCard = depositCardService.update(depositCard);
+					updateAlert(updatedDepositCard);
+					clearFields();
 				}
-				depositCard.setSavingBook(savingBook);
-				savingBook.setDeposit(savingBook.getDeposit() + getDepositAmount());
-				savingBookService.update(savingBook);
-				DepositCard updatedDepositCard = depositCardService.update(depositCard);
-				updateAlert(updatedDepositCard);
 			}
-
-			clearFields();
 			loadDepositCardDetails();
 		}
-
 	}
 
 	@FXML

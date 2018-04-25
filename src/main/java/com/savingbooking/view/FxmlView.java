@@ -4,6 +4,20 @@ import java.util.ResourceBundle;
 
 public enum FxmlView {
 
+	DASHBOARD {
+
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("user.title");
+
+		}
+
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/DashBoard.fxml";
+		}
+
+	},
 	USER {
 		@Override
 		public String getTitle() {
@@ -57,6 +71,18 @@ public enum FxmlView {
 		@Override
 		public String getFxmlFile() {
 			return "/fxml/WithdrawCard.fxml";
+		}
+	},
+	REPORT {
+		@Override
+		public String getTitle() {
+			return null;
+		}
+
+		@Override
+		public String getFxmlFile() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	};
 
