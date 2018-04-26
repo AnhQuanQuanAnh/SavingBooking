@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.savingbooking.config.StageManager;
+import com.savingbooking.model.User;
 import com.savingbooking.service.UserService;
 import com.savingbooking.view.FxmlView;
 
@@ -45,8 +46,13 @@ public class LoginController implements Initializable {
 	@FXML
 	private void login(ActionEvent event) throws IOException {
 		if (userService.authenticate(getUsername(), getPassword())) {
-			
-			stageManager.switchScene(FxmlView.DASHBOARD);
+
+			User user = userService.findByEmail(getUsername());
+			if (user.getRole().equals("User")) {
+				stageManager.switchScene(FxmlView.DASHBOARD);
+			} else {
+				stageManager.switchScene(FxmlView.USER);
+			}
 
 		} else {
 			lblLogin.setText("Login Failed.");
